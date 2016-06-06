@@ -1,6 +1,6 @@
 function norm_col(fold)
-
-namesfile= [fold,'/','filenames_copy.txt'];
+keepNames=1;
+namesfile= [fold,'/','filenames.txt'];
 fold_crop=[fold,'/norm_faces'];%_res04 %[fold,'/norm_faces/','crop_faces_a225b34L105iod60'];
 fold_col=[fold,'/','norm_faces_col_ALL'];%_res04
 [status,message,messageid] = mkdir(fold_col);
@@ -91,7 +91,7 @@ fclose(fid)
 
 mns=mean(mn_mat)
 stds=mean(std_mat)
-error
+%error
 
         %old: params for 80 iod
         %mns=[74.1369    9.0508   14.6381];%means for AR set or:   mean(mn_mat)
@@ -173,7 +173,13 @@ for k=1:118%size(coords,1)%120
    
    %%%%stim1...- males, stim2... - females
    %imwrite(im_rgb, [fold_col, '/stim2', sprintf('%03.0f', k),'1.tif']) %only neutral
-   imwrite(im_rgb, [fold_col, '/stim2', sprintf('%03.0f', ceil(k/2)), num2str(2-rem(k,2)),'.tif']) %1 or 2 appended for neut and happy
+   if keepNames
+       cd(fold_crop)
+       files=dir('*.tif');
+       imwrite(im_rgb, [fold_col, '/' files(k).name])
+   else
+       imwrite(im_rgb, [fold_col, '/stim2', sprintf('%03.0f', ceil(k/2)), num2str(2-rem(k,2)),'.tif']) %1 or 2 appended for neut and happy
+   end
  end
 
     
